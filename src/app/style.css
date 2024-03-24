@@ -6,7 +6,7 @@
 /* FOOTER */
 
 .footer-area {
-  margin-top: 50px;
+  margin-top: 30px;
   border-top: 4px solid rgba(102, 102, 102, 0.3);
   padding-top: 20px;
   text-align: center;
@@ -20,6 +20,12 @@
 }
 .footer-image img {
   max-width: 25px;
+}
+
+/* GAMEFOOTER */
+
+.game-footer {
+  margin-top: 50px;
 }
 
 /* HEADER */

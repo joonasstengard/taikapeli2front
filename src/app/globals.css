@@ -9,8 +9,9 @@
 */
 
 body {
-  background-image: url("/forestbg.jpg");
+  background-image: url("/darkbg.webp");
   background-color: #111;
+  background-position: center;
   margin: 15px;
   color: white;
   /* should these be removed from body and added separately? */
