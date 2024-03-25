@@ -25,7 +25,6 @@ export default function ArmyView() {
             ))}
             <style jsx>{`
             .army-area{
-                background-color:black;
                 padding-left: 70px;
                 padding-right: 70px;
                 padding-top: 20px;
@@ -33,7 +32,7 @@ export default function ArmyView() {
                 clip-path: polygon(30px 0%, 100% 0, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%, 0% 30px);
                 background-color: #212121;
                 border-radius: 1rem;
-                border: #212121 0.2rem solid;
+                border: black 0.2rem solid;
                 box-shadow: 0.4rem 0.4rem 0.6rem #00000040;
             }
              `}</style>

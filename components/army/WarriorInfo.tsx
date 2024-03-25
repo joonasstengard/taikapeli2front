@@ -8,11 +8,11 @@ interface WarriorInfoProps {
 export default function WarriorInfo({ warrior }: WarriorInfoProps) {
 
     // Construct the image file path
-    const imagePath = `/WarriorPictures/${warrior.class}${warrior.picture}.png`;
+    const imagePath = `/WarriorPictures/${warrior.class}${warrior.gender}${warrior.picture}.webp`;
 
     return (
         <div className="warrior-info">
-            <Image className="warrior-image" src={imagePath} alt={warrior.name} width={30} height={30} />
+            <Image className="warrior-image" src={imagePath} alt={warrior.name} width={80} height={50} />
             <p><b>{warrior.name}</b></p>
             <p>{warrior.class}</p>
             <p>Health: {warrior.health}</p>

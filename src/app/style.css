@@ -3,6 +3,15 @@
    ----------------------------------------------------
 */
 
+/* CSS THEME VARIABLES */
+
+:root {
+  --dark-gray: #212121;
+  --secondary-color: #2ecc71;
+  --font-stack: 'Helvetica Neue', sans-serif;
+  --base-padding: 16px;
+}
+
 /* FOOTER */
 
 .footer-area {
@@ -37,9 +46,43 @@
   align-items: center;
   flex-direction: column;
 }
-.navbar {
-  list-style-type: none;
+.logo-area{
+  background: linear-gradient(to bottom, white, gray);
+  opacity: 85%;
+  border-radius: 200px;
+  border: 8px solid var(--dark-gray);
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 10px;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-bottom: 20px;
+  margin-bottom: 6px;
 }
+.navbar {
+  display: flex; /* Use Flexbox */
+  justify-content: center; /* Horizontally align items */
+  flex-wrap: nowrap; /* Prevent wrapping */
+}
+.navbar a {
+  padding: 4px;
+  font-size: 20px;
+  color: white;
+  background:var(--dark-gray);
+  text-transform: uppercase;
+  display: inline-block;
+  transition: all 0.2s ease-in-out;
+  margin-bottom: 20px;
+}
+
+.navbar a:hover {
+  background: white;
+  color: var(--dark-gray);
+}
+
 
 /* MAIN */
 
