@@ -14,7 +14,12 @@ export default function ArmyView() {
         fetch(`http://localhost:3001/game/army/${userId}/${armyId}`)
             .then(response => response.json())
             .then(data => setWarriors(data))
-            .catch(error => console.error('Error:', error));
+            .catch(error => console.error('Error fetching army data:', error));
+
+        fetch(`http://localhost:3001/game/warriors/${userId}/${armyId}`)
+            .then(response => response.json())
+            .then(data => setWarriors(data))
+            .catch(error => console.error('Error fetching warrior data:', error));
     }, []); // Empty dependency array to fetch only once on mount
 
     return (

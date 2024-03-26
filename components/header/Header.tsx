@@ -7,7 +7,9 @@ export default function Header() {
     return (
         <div className="header-area">
             <div className="logo-area">
-                <Image className="game-logo" src={"/landofcharacterslogo.png"} alt={'logo'} width={380} height={206} />
+                <a href="/">
+                    <Image className="game-logo" src={"/landofcharacterslogo.png"} alt={'logo'} width={380} height={206} />
+                </a>
             </div>
             <div className="navbar">
                 <a href="/game/battle">Battle</a>

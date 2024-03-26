@@ -7,4 +7,9 @@ export default interface Warrior {
     picture: number;
     health: number;
     mana: number;
+    stamina: number;
+    strength: number;
+    speed: number;
+    faith: number;
+    magicResistance: number;
 }
