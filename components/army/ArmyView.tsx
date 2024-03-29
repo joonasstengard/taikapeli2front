@@ -3,7 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import WarriorInfo from './WarriorInfo';
 
+import type Army from '../../types/Army';
+
 export default function ArmyView() {
+    const [army, setArmy] = useState<Army | null>(null);
     const [warriors, setWarriors] = useState([]);
 
     useEffect(() => {
@@ -13,7 +16,7 @@ export default function ArmyView() {
 
         fetch(`http://localhost:3001/game/army/${userId}/${armyId}`)
             .then(response => response.json())
-            .then(data => setWarriors(data))
+            .then(data => setArmy(data[0]))
             .catch(error => console.error('Error fetching army data:', error));
 
         fetch(`http://localhost:3001/game/warriors/${userId}/${armyId}`)
@@ -24,7 +27,7 @@ export default function ArmyView() {
 
     return (
         <div className="army-area">
-            <h2>Army</h2>
+            {army && <h2>{army.name}</h2>}
             {warriors.map(warrior => (
                 <WarriorInfo key={warrior.id} warrior={warrior} />
             ))}
