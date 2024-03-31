@@ -12,4 +12,5 @@ export default interface Warrior {
     speed: number;
     faith: number;
     magicResistance: number;
+    battleTileCurrent: string;
 }

@@ -1,16 +1,16 @@
 import Image from 'next/image';
-import Warrior from '../../types/Warrior';
+import type Warrior from '../../types/Warrior';
 
 interface WarriorInfoProps {
     warrior: Warrior;
 }
 
 export default function WarriorInfo({ warrior }: WarriorInfoProps) {
-    const imagePath = `/WarriorPictures/${warrior.class}${warrior.gender}${warrior.picture}.webp`;
+    const imagePath = `/WarriorPictures/PixelStyle/${warrior.class}${warrior.gender}${warrior.picture}.webp`;
 
     return (
         <div className="warrior-info">
-            <Image className="warrior-image" src={imagePath} alt={warrior.name} width={80} height={50} />
+            <Image className="warrior-image" src={imagePath} alt={warrior.name} width={100} height={100} />
 
             <div className="warrior-property"><span className="left"><b>{warrior.name}</b></span></div>
             <div className="warrior-property"><span className="left">{warrior.class}</span></div>
