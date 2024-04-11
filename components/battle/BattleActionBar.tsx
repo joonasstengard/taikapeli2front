@@ -2,14 +2,14 @@ import Image from 'next/image';
 import type Warrior from '../../types/Warrior';
 
 interface Props {
-    selectedWarrior: Warrior;
+    activeWarrior: Warrior;
 }
 
-export default function BattleActionBar({ selectedWarrior }: Props) {
+export default function BattleActionBar({activeWarrior }: Props) {
 
-    const selectedWarriorImagePath = `/WarriorPictures/PixelStyle/${selectedWarrior?.class}${selectedWarrior?.gender}${selectedWarrior?.picture}.webp`;
+    const activeWarriorImagePath = `/WarriorPictures/PixelStyle/${activeWarrior?.class}${activeWarrior?.gender}${activeWarrior?.picture}.webp`;
 
-    if (!selectedWarrior) {
+    if (!activeWarrior) {
         return (
             null
         )
@@ -17,32 +17,28 @@ export default function BattleActionBar({ selectedWarrior }: Props) {
 
     return (
         <div className="battle-action-bar">
-            <p className="warrior-title-text"><b>{selectedWarrior?.name}</b>, {selectedWarrior?.class}</p>
+            <p className="warrior-title-text"><b>{activeWarrior?.name}</b>, {activeWarrior?.class}</p>
             <div className="image-and-stats">
                 <div className="selected-warrior-image">
-                    {selectedWarrior && <Image src={selectedWarriorImagePath} alt={selectedWarrior?.name} height={85} width={85} />}
+                    {activeWarrior && <Image src={activeWarriorImagePath} alt={activeWarrior?.name} height={85} width={85} />}
                 </div>
 
                 <div className="left-grid">
-                    <p>Health: {selectedWarrior?.health}/{selectedWarrior?.health}</p>
-                    <p>Mana: {selectedWarrior?.mana}/{selectedWarrior?.mana}</p>
-                    <p>Stamina: {selectedWarrior?.stamina}/{selectedWarrior?.stamina}</p>
+                    <p>Health: {activeWarrior?.health}/{activeWarrior?.health}</p>
+                    <p>Mana: {activeWarrior?.mana}/{activeWarrior?.mana}</p>
+                    <p>Stamina: {activeWarrior?.stamina}/{activeWarrior?.stamina}</p>
                 </div>
 
                 <div className="center-grid">
-                    <p>Strength: {selectedWarrior?.strength}</p>
-                    <p>Speed: {selectedWarrior?.speed}</p>
-                    <p>Faith: {selectedWarrior?.faith}</p>
+                    <p>Strength: {activeWarrior?.strength}</p>
+                    <p>Speed: {activeWarrior?.speed}</p>
+                    <p>Faith: {activeWarrior?.faith}</p>
                 </div>
 
                 <div className="right-grid">
-                    <p>MR: {selectedWarrior?.magicResistance}</p>
-                </div>
-                <div>
-                    <button>asd</button>
+                    <p>MR: {activeWarrior?.magicResistance}</p>
                 </div>
             </div>
-
             <style jsx>{`
             .battle-action-bar {
                 background-color:#3b3b3b;

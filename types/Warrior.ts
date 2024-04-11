@@ -1,5 +1,9 @@
 export default interface Warrior {
     id: number;
+
+    // foreign keys
+    armyId: number;
+
     name: string;
     class: string;
     gender: string;
@@ -13,4 +17,5 @@ export default interface Warrior {
     faith: number;
     magicResistance: number;
     battleTileCurrent: string;
+    hasMovedThisRound: number;
 }
