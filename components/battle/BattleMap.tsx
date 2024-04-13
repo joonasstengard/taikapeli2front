@@ -4,7 +4,7 @@ import type Warrior from "../../types/Warrior";
 
 interface Props {
   // handleSelectedWarriorChange: (selectedWarrior: Warrior) => void;
-  handleMoveCommandWarriorToTile: (tileId: string) => void;
+  handlePlayerMoveWarrior: (tileId: string) => void;
   playersWarriors: Warrior[];
   computersWarriors: Warrior[];
   isSelectingMovingLocation: boolean;
@@ -13,7 +13,7 @@ interface Props {
 
 export default function BattleMap({
   // handleSelectedWarriorChange,
-  handleMoveCommandWarriorToTile,
+  handlePlayerMoveWarrior,
   isSelectingMovingLocation,
   playersWarriors,
   computersWarriors,
@@ -37,8 +37,9 @@ export default function BattleMap({
           <BattleMapTile
             key={id}
             battleMapHeight={battleMapHeight}
+            battleMapWidth={battleMapWidth}
             // handleSelectedWarriorChange={handleSelectedWarriorChange}
-            handleMoveCommandWarriorToTile={handleMoveCommandWarriorToTile}
+            handlePlayerMoveWarrior={handlePlayerMoveWarrior}
             isSelectingMovingLocation={isSelectingMovingLocation}
             tileId={id}
             warrior={warriorOnTile}

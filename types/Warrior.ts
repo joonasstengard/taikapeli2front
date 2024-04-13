@@ -6,6 +6,7 @@ export default interface Warrior {
 
     name: string;
     class: string;
+    currentStamina: number;
     gender: string;
     // warrior's img is class+gender+picture+.png, like KnightMale1.png
     picture: number;
