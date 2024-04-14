@@ -4,16 +4,20 @@ import type Warrior from "../../types/Warrior";
 
 interface Props {
   // handleSelectedWarriorChange: (selectedWarrior: Warrior) => void;
+  handlePlayerAttack: (tileId: string) => void;
   handlePlayerMoveWarrior: (tileId: string) => void;
   playersWarriors: Warrior[];
   computersWarriors: Warrior[];
+  isSelectingAttackingTarget: boolean;
   isSelectingMovingLocation: boolean;
   warriorWhoseTurnItIsToMove: Warrior;
 }
 
 export default function BattleMap({
   // handleSelectedWarriorChange,
+  handlePlayerAttack,
   handlePlayerMoveWarrior,
+  isSelectingAttackingTarget,
   isSelectingMovingLocation,
   playersWarriors,
   computersWarriors,
@@ -39,7 +43,9 @@ export default function BattleMap({
             battleMapHeight={battleMapHeight}
             battleMapWidth={battleMapWidth}
             // handleSelectedWarriorChange={handleSelectedWarriorChange}
+            handlePlayerAttack={handlePlayerAttack}
             handlePlayerMoveWarrior={handlePlayerMoveWarrior}
+            isSelectingAttackingTarget={isSelectingAttackingTarget}
             isSelectingMovingLocation={isSelectingMovingLocation}
             tileId={id}
             warrior={warriorOnTile}

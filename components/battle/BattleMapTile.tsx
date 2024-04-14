@@ -5,7 +5,9 @@ interface Props {
   battleMapHeight: number;
   battleMapWidth: number;
   // handleSelectedWarriorChange: (selectedWarrior: Warrior) => void;
+  handlePlayerAttack: (tileId: string) => void;
   handlePlayerMoveWarrior: (tileId: string) => void;
+  isSelectingAttackingTarget: boolean;
   isSelectingMovingLocation: boolean;
   tileId: string;
   warrior?: Warrior;
@@ -16,7 +18,9 @@ export default function BattleMapTile({
   battleMapHeight,
   battleMapWidth,
   // handleSelectedWarriorChange,
+  handlePlayerAttack,
   handlePlayerMoveWarrior,
+  isSelectingAttackingTarget,
   isSelectingMovingLocation,
   tileId,
   warrior,
@@ -48,19 +52,61 @@ export default function BattleMapTile({
       warriorWhoseTurnItIsToMove?.battleTileCurrent,
       tileId
     );
-    const maxDistance = getMovementRange(
+    const maxDistanceForAttacking = warriorWhoseTurnItIsToMove?.attackRange;
+    const maxDistanceForMoving = getMovementRange(
       warriorWhoseTurnItIsToMove?.currentStamina
     );
-    if (isSelectingMovingLocation && !warrior && distance <= maxDistance) {
+    // attacking
+    if (
+      isSelectingAttackingTarget &&
+      warrior &&
+      distance <= maxDistanceForAttacking
+    ) {
+      handlePlayerAttack(tileId);
+    } else if (distance > maxDistanceForAttacking) {
+      // alert the user here that they are trying to attack past the max range?
+    }
+    // moving
+    if (
+      isSelectingMovingLocation &&
+      !warrior &&
+      distance <= maxDistanceForMoving
+    ) {
       handlePlayerMoveWarrior(tileId);
-    } else if (distance > maxDistance) {
-      // alert the user here that they are trying to click past the max range?
+    } else if (distance > maxDistanceForMoving) {
+      // alert the user here that they are trying to move past the max range?
     }
   };
 
   // Determine tile highlights
   let tileClass = "tile";
-  if (isSelectingMovingLocation) {
+  if (isSelectingAttackingTarget) {
+    // attacking------------
+    const distance = calculateDistance(
+      warriorWhoseTurnItIsToMove?.battleTileCurrent,
+      tileId
+    );
+    const maxDistance = warriorWhoseTurnItIsToMove?.attackRange;
+
+    // borders
+    if (warrior) {
+      if (warrior.id === warriorWhoseTurnItIsToMove.id) {
+        // self tile
+        tileClass = "tile turn";
+      } else {
+        // selecting this tile while there is another warrior in it
+        if (distance <= maxDistance) {
+          tileClass = "tile attacking-tile-with-warrior";
+        } else {
+          tileClass = "tile attacking-tile-too-far-away";
+        }
+      }
+    } else {
+      // trying to attack a tile with no warrior
+      tileClass = "tile attacking-empty-tile";
+    }
+  } else if (isSelectingMovingLocation) {
+    // moving-------------------
     const distance = calculateDistance(
       warriorWhoseTurnItIsToMove?.battleTileCurrent,
       tileId
@@ -70,20 +116,20 @@ export default function BattleMapTile({
     );
 
     // borders
-    if (warrior && warriorWhoseTurnItIsToMove) {
+    if (warrior) {
       if (warrior.id === warriorWhoseTurnItIsToMove.id) {
         // this tiles warriors turn to move
         tileClass = "tile turn";
-      } else if (isSelectingMovingLocation) {
+      } else {
         // selecting this tile while there is another warrior in it
-        tileClass = "tile selecting-tile-with-warrior";
+        tileClass = "tile moving-tile-with-warrior";
       }
     } else if (isSelectingMovingLocation) {
       // empty tile
       if (distance <= maxDistance) {
-        tileClass = "tile selecting-empty-tile";
+        tileClass = "tile moving-empty-tile";
       } else {
-        tileClass = "tile selecting-tile-too-far-away";
+        tileClass = "tile moving-tile-too-far-away";
       }
     }
   }
@@ -99,39 +145,82 @@ export default function BattleMapTile({
     // texturePath = `/textures/greengrassstone${randomTileSubNumber}.webp`;
     texturePath = `/textures/greengrassstone${3}.webp`;
   } else {
-    // const randomTileSubNumber = Math.floor(Math.random() * 7) + 1;
-    // texturePath = `/textures/greengrass${randomTileSubNumber}.webp`;
-    texturePath = `/textures/greengrass${3}.webp`;
+    const randomTileSubNumber = Math.floor(Math.random() * 5) + 1;
+    texturePath = `/textures/greengrass${randomTileSubNumber}.webp`;
+    // texturePath = `/textures/greengrass${3}.webp`;
   }
 
   return (
     <div className={tileClass} onClick={handleClick}>
       <Image src={texturePath} alt={"tile"} width={70} height={70} />
       {warrior && (
-        <div className="warrior-image">
-          <Image
-            src={`/WarriorPictures/PixelStyle/${warrior.class}${warrior.gender}${warrior.picture}.webp`}
-            alt={"warrior"}
-            width={70}
-            height={70}
-          />
+        <div>
+          <div className="health-bar">
+            <div
+              className="health-bar-green"
+              style={{
+                width: `${(warrior.currentHealth / warrior.health) * 100}%`,
+              }}
+            ></div>
+            <div
+              className="health-bar-red"
+              style={{
+                width: `${
+                  100 - (warrior.currentHealth / warrior.health) * 100
+                }%`,
+              }}
+            ></div>
+          </div>
+          <div className="warrior-image">
+            <Image
+              src={`/WarriorPictures/PixelStyle/${warrior.class}${warrior.gender}${warrior.picture}.webp`}
+              alt={"warrior"}
+              width={70}
+              height={70}
+            />
+          </div>
         </div>
       )}
       <div className="tile-id">{tileId}</div>
       <style jsx>{`
+        .health-bar {
+          position: absolute;
+          top: 0px;
+          left: 5px;
+          width: 60px;
+          height: 5px;
+          display: flex;
+        }
+        .health-bar-green {
+          height: 5px;
+          background-color: green;
+        }
+        .health-bar-red {
+          height: 5px;
+          background-color: #991717;
+        }
         .tile {
           position: relative;
           width: 70px;
           height: 70px;
         }
-        .tile.selecting-empty-tile:hover {
-          border: 1px solid green;
+        .tile.attacking-empty-tile:hover {
+          border: 2px solid black;
         }
-        .tile.selecting-tile-too-far-away:hover {
-          border: 1px solid red;
+        .tile.attacking-tile-too-far-away:hover {
+          border: 2px solid red;
         }
-        .tile.selecting-tile-with-warrior:hover {
-          border: 1px solid red;
+        .tile.attacking-tile-with-warrior:hover {
+          border: 2px solid green;
+        }
+        .tile.moving-empty-tile:hover {
+          border: 2px solid green;
+        }
+        .tile.moving-tile-too-far-away:hover {
+          border: 2px solid black;
+        }
+        .tile.moving-tile-with-warrior:hover {
+          border: 2px solid red;
         }
         .tile.turn {
           border: 2px solid yellow;

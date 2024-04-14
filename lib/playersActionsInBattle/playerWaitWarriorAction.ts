@@ -2,7 +2,7 @@ import type { SetStateAction, Dispatch } from "react";
 import type Warrior from "../../types/Warrior";
 import type Battle from "../../types/Battle";
 
-export const playerWaitAction = (
+export const playerWaitWarriorAction = (
   warriorWhoseTurnItIsToMove: Warrior,
   battle: Battle,
   setBattle: Dispatch<SetStateAction<Battle>>,

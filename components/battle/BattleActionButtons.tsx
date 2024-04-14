@@ -1,21 +1,44 @@
+import type { SetStateAction, Dispatch } from "react";
+
 interface Props {
-  handleIsSelectingMovingLocation: (isSelectingMovingLocation: boolean) => void;
   handlePlayerWait: () => void;
+  isSelectingAttackingTarget: boolean;
   isSelectingMovingLocation: boolean;
+  setIsSelectingAttackingTarget: Dispatch<SetStateAction<boolean>>;
+  setIsSelectingMovingLocation: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function BattleActionButtons({
-  handleIsSelectingMovingLocation,
   handlePlayerWait,
+  isSelectingAttackingTarget,
   isSelectingMovingLocation,
+  setIsSelectingAttackingTarget,
+  setIsSelectingMovingLocation,
 }: Props) {
+  const attackButtonText = isSelectingAttackingTarget ? "Cancel" : "Attack";
   const moveButtonText = isSelectingMovingLocation ? "Cancel" : "Move";
 
   const handleMoveButtonClick = () => {
+    // reset others first
+    if (isSelectingAttackingTarget) {
+      setIsSelectingAttackingTarget(false);
+    }
     if (!isSelectingMovingLocation) {
-      handleIsSelectingMovingLocation(true);
+      setIsSelectingMovingLocation(true);
     } else {
-      handleIsSelectingMovingLocation(false);
+      setIsSelectingMovingLocation(false);
+    }
+  };
+
+  const handleAttackButtonClick = () => {
+    // reset others first
+    if (isSelectingMovingLocation) {
+      setIsSelectingMovingLocation(false);
+    }
+    if (!isSelectingAttackingTarget) {
+      setIsSelectingAttackingTarget(true);
+    } else {
+      setIsSelectingAttackingTarget(false);
     }
   };
 
@@ -24,7 +47,12 @@ export default function BattleActionButtons({
       <button className="action-buttons-button" onClick={handleMoveButtonClick}>
         {moveButtonText}
       </button>
-      <button className="action-buttons-button">Attack</button>
+      <button
+        className="action-buttons-button"
+        onClick={handleAttackButtonClick}
+      >
+        {attackButtonText}
+      </button>
       <button className="action-buttons-button">Spells</button>
       <button className="action-buttons-button">Skills</button>
       <button className="action-buttons-button" onClick={handlePlayerWait}>

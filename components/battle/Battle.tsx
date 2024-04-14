@@ -5,8 +5,9 @@ import BattleActionBar from "./BattleActionBar";
 import BattleActionButtons from "./BattleActionButtons";
 import BattleMap from "./BattleMap";
 
+import { playerAttackWarriorAction } from "../../lib/playersActionsInBattle/playerAttackWarriorAction";
 import { playerMoveWarriorAction } from "../../lib/playersActionsInBattle/playerMoveWarriorAction";
-import { playerWaitAction } from "../../lib/playersActionsInBattle/playerWaitAction";
+import { playerWaitWarriorAction } from "../../lib/playersActionsInBattle/playerWaitWarriorAction";
 
 import type Battle from "../../types/Battle";
 import type Warrior from "../../types/Warrior";
@@ -14,6 +15,8 @@ import type Warrior from "../../types/Warrior";
 export default function Battle() {
   const [battle, setBattle] = useState<Battle | null>(null);
   const [playersWarriors, setPlayersWarriors] = useState<Warrior[]>([]);
+  const [isSelectingAttackingTarget, setIsSelectingAttackingTarget] =
+    useState<boolean>(false);
   const [isSelectingMovingLocation, setIsSelectingMovingLocation] =
     useState<boolean>(false);
   // const [selectedWarrior, setSelectedWarrior] = useState<Warrior | null>(null);
@@ -45,8 +48,8 @@ export default function Battle() {
 
   useEffect(() => {
     if (computersWarriors.length > 0 && playersWarriors.length > 0) {
-      // Adding a timeout here to still keep the delay functionality
-      setTimeout(determineNextWarriorToMove, 1500);
+      // small timeout added here, just to artificially make turns a bit longer for now, can be removed
+      setTimeout(determineNextWarriorToMove, 1000);
     }
   }, [battle, computersWarriors, playersWarriors]); // Watch for changes in these arrays
 
@@ -95,26 +98,32 @@ export default function Battle() {
         setPlayersWarriors(data.playerArmyWarriors);
         setComputersWarriors(data.computerArmyWarriors);
         setBattle(data.battleObject);
-        // Introduce a 4-second delay before determining who moves next
-        // setTimeout(determineNextWarriorToMove, 4000);
       })
       .catch((error) =>
         console.error(`Error during the computer's turn:`, error)
       );
   };
 
-  const handleIsSelectingMovingLocation = (isSelectingMovingLocation) => {
-    console.log("handleIsSelectingMovingLocation called");
-    if (!isSelectingMovingLocation) {
-      setIsSelectingMovingLocation(false);
-    } else {
-      setIsSelectingMovingLocation(true);
-    }
+  // PLAYERS WARRIORS COMMANDS =================================================================
+  // player attacks with their warrior to this tile (it has a warrior in it)
+  const handlePlayerAttack = (tileId) => {
+    // resetting stuff first
+    setIsSelectingAttackingTarget(false);
+    setIsSelectingMovingLocation(false);
+    // calling the helper
+    playerAttackWarriorAction(
+      tileId,
+      warriorWhoseTurnItIsToMove,
+      battle,
+      setBattle,
+      setPlayersWarriors,
+      setComputersWarriors
+    );
   };
 
-  // PLAYERS WARRIORS COMMANDS =================================================================
   const handlePlayerMoveWarrior = (tileId) => {
     // resetting stuff first
+    setIsSelectingAttackingTarget(false);
     setIsSelectingMovingLocation(false);
     // calling the helper that moves the warrior
     playerMoveWarriorAction(
@@ -131,7 +140,7 @@ export default function Battle() {
     // resetting stuff first
     setIsSelectingMovingLocation(false);
     // calling helper that performs the wait action
-    playerWaitAction(
+    playerWaitWarriorAction(
       warriorWhoseTurnItIsToMove,
       battle,
       setBattle,
@@ -141,24 +150,6 @@ export default function Battle() {
   };
 
   // =============================================================================================
-
-  const updateWarriorPosition = (warriorId, newTileId) => {
-    const updateWarriors = (warriors) => {
-      return warriors.map((warrior) => {
-        if (warrior.id === warriorId) {
-          return {
-            ...warrior,
-            battleTileCurrent: newTileId,
-            hasMovedThisRound: 1,
-          };
-        }
-        return warrior;
-      });
-    };
-
-    setPlayersWarriors((prevWarriors) => updateWarriors(prevWarriors));
-    setComputersWarriors((prevWarriors) => updateWarriors(prevWarriors));
-  };
 
   /* const handleSelectedWarriorChange = (selectedWarrior: Warrior) => {
         setSelectedWarrior(selectedWarrior);
@@ -173,15 +164,19 @@ export default function Battle() {
         computersWarriors={computersWarriors}
         playersWarriors={playersWarriors}
         // handleSelectedWarriorChange={handleSelectedWarriorChange}
+        handlePlayerAttack={handlePlayerAttack}
         handlePlayerMoveWarrior={handlePlayerMoveWarrior}
+        isSelectingAttackingTarget={isSelectingAttackingTarget}
         isSelectingMovingLocation={isSelectingMovingLocation}
         warriorWhoseTurnItIsToMove={warriorWhoseTurnItIsToMove}
       />
       <BattleActionBar activeWarrior={warriorWhoseTurnItIsToMove} />
       <BattleActionButtons
-        handleIsSelectingMovingLocation={handleIsSelectingMovingLocation}
         handlePlayerWait={handlePlayerWait}
+        isSelectingAttackingTarget={isSelectingAttackingTarget}
         isSelectingMovingLocation={isSelectingMovingLocation}
+        setIsSelectingAttackingTarget={setIsSelectingAttackingTarget}
+        setIsSelectingMovingLocation={setIsSelectingMovingLocation}
       />
     </div>
   );
