@@ -1,4 +1,6 @@
 import Image from "next/image";
+
+import type Spell from "../../types/Spell";
 import type Warrior from "../../types/Warrior";
 
 interface Props {
@@ -7,8 +9,10 @@ interface Props {
   // handleSelectedWarriorChange: (selectedWarrior: Warrior) => void;
   handlePlayerAttack: (tileId: string) => void;
   handlePlayerMoveWarrior: (tileId: string) => void;
+  handlePlayerSpell: (spell: Spell, tileId: string) => void;
   isSelectingAttackingTarget: boolean;
   isSelectingMovingLocation: boolean;
+  isSelectingSpellTargetForSpell: Spell | null;
   tileId: string;
   warrior?: Warrior;
   warriorWhoseTurnItIsToMove: Warrior;
@@ -20,8 +24,10 @@ export default function BattleMapTile({
   // handleSelectedWarriorChange,
   handlePlayerAttack,
   handlePlayerMoveWarrior,
+  handlePlayerSpell,
   isSelectingAttackingTarget,
   isSelectingMovingLocation,
+  isSelectingSpellTargetForSpell,
   tileId,
   warrior,
   warriorWhoseTurnItIsToMove,
@@ -56,6 +62,8 @@ export default function BattleMapTile({
     const maxDistanceForMoving = getMovementRange(
       warriorWhoseTurnItIsToMove?.currentStamina
     );
+    const maxDistanceForSpellTarget =
+      isSelectingSpellTargetForSpell?.spellRange;
     // attacking
     if (
       isSelectingAttackingTarget &&
@@ -75,6 +83,16 @@ export default function BattleMapTile({
       handlePlayerMoveWarrior(tileId);
     } else if (distance > maxDistanceForMoving) {
       // alert the user here that they are trying to move past the max range?
+    }
+    // casting spell to target tile
+    if (
+      isSelectingSpellTargetForSpell &&
+      warrior &&
+      distance <= maxDistanceForSpellTarget
+    ) {
+      handlePlayerSpell(isSelectingSpellTargetForSpell, tileId);
+    } else if (distance > maxDistanceForSpellTarget) {
+      // alert the user here that they are trying to target spell past the max range?
     }
   };
 
@@ -114,7 +132,6 @@ export default function BattleMapTile({
     const maxDistance = getMovementRange(
       warriorWhoseTurnItIsToMove?.currentStamina
     );
-
     // borders
     if (warrior) {
       if (warrior.id === warriorWhoseTurnItIsToMove.id) {
@@ -131,6 +148,30 @@ export default function BattleMapTile({
       } else {
         tileClass = "tile moving-tile-too-far-away";
       }
+    }
+  } else if (isSelectingSpellTargetForSpell) {
+    // selecting where to target SPELL------------
+    const distance = calculateDistance(
+      warriorWhoseTurnItIsToMove?.battleTileCurrent,
+      tileId
+    );
+    const maxDistance = isSelectingSpellTargetForSpell.spellRange;
+    // borders
+    if (warrior) {
+      if (warrior.id === warriorWhoseTurnItIsToMove.id) {
+        // self tile
+        tileClass = "tile turn";
+      } else {
+        // selecting this tile while there is another warrior in it
+        if (distance <= maxDistance) {
+          tileClass = "tile attacking-tile-with-warrior";
+        } else {
+          tileClass = "tile attacking-tile-too-far-away";
+        }
+      }
+    } else {
+      // trying to attack a tile with no warrior
+      tileClass = "tile attacking-empty-tile";
     }
   }
 

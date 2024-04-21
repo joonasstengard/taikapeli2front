@@ -1,15 +1,18 @@
 import BattleMapTile from "./BattleMapTile";
 
+import type Spell from "../../types/Spell";
 import type Warrior from "../../types/Warrior";
 
 interface Props {
   // handleSelectedWarriorChange: (selectedWarrior: Warrior) => void;
   handlePlayerAttack: (tileId: string) => void;
   handlePlayerMoveWarrior: (tileId: string) => void;
+  handlePlayerSpell: (spell: Spell, tileId: string) => void;
   playersWarriors: Warrior[];
   computersWarriors: Warrior[];
   isSelectingAttackingTarget: boolean;
   isSelectingMovingLocation: boolean;
+  isSelectingSpellTargetForSpell: Spell | null;
   warriorWhoseTurnItIsToMove: Warrior;
 }
 
@@ -17,8 +20,10 @@ export default function BattleMap({
   // handleSelectedWarriorChange,
   handlePlayerAttack,
   handlePlayerMoveWarrior,
+  handlePlayerSpell,
   isSelectingAttackingTarget,
   isSelectingMovingLocation,
+  isSelectingSpellTargetForSpell,
   playersWarriors,
   computersWarriors,
   warriorWhoseTurnItIsToMove,
@@ -45,8 +50,10 @@ export default function BattleMap({
             // handleSelectedWarriorChange={handleSelectedWarriorChange}
             handlePlayerAttack={handlePlayerAttack}
             handlePlayerMoveWarrior={handlePlayerMoveWarrior}
+            handlePlayerSpell={handlePlayerSpell}
             isSelectingAttackingTarget={isSelectingAttackingTarget}
             isSelectingMovingLocation={isSelectingMovingLocation}
+            isSelectingSpellTargetForSpell={isSelectingSpellTargetForSpell}
             tileId={id}
             warrior={warriorOnTile}
             warriorWhoseTurnItIsToMove={warriorWhoseTurnItIsToMove}

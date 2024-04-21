@@ -7,20 +7,29 @@ import BattleMap from "./BattleMap";
 
 import { playerAttackWarriorAction } from "../../lib/playersActionsInBattle/playerAttackWarriorAction";
 import { playerMoveWarriorAction } from "../../lib/playersActionsInBattle/playerMoveWarriorAction";
+import { playerSpellWarriorAction } from "../../lib/playersActionsInBattle/playerSpellWarriorAction";
 import { playerWaitWarriorAction } from "../../lib/playersActionsInBattle/playerWaitWarriorAction";
 
 import type Battle from "../../types/Battle";
+import type Spell from "../../types/Spell";
 import type Warrior from "../../types/Warrior";
 
 export default function Battle() {
   const [battle, setBattle] = useState<Battle | null>(null);
+  // display warriors stats, skills or spells in the BattleActionBar
+  const [battleActionBarDisplayWhat, setBattleActionBarDisplayWhat] = useState<
+    "warriorStats" | "warriorSpells" | "warriorSkills"
+  >("warriorStats");
+  const [computersWarriors, setComputersWarriors] = useState<Warrior[]>([]);
   const [playersWarriors, setPlayersWarriors] = useState<Warrior[]>([]);
   const [isSelectingAttackingTarget, setIsSelectingAttackingTarget] =
     useState<boolean>(false);
   const [isSelectingMovingLocation, setIsSelectingMovingLocation] =
     useState<boolean>(false);
+  // if null, not selecting spell target. otherwise contains spell object for spell that is being targeted
+  const [isSelectingSpellTargetForSpell, setIsSelectingSpellTargetForSpell] =
+    useState<Spell | null>(null);
   // const [selectedWarrior, setSelectedWarrior] = useState<Warrior | null>(null);
-  const [computersWarriors, setComputersWarriors] = useState<Warrior[]>([]);
   const [warriorWhoseTurnItIsToMove, setWarriorWhoseTurnItIsToMove] =
     useState<Warrior>(null);
 
@@ -105,10 +114,7 @@ export default function Battle() {
 
   // PLAYERS WARRIORS COMMANDS =================================================================
   // player attacks with their warrior to this tile (it has a warrior in it)
-  const handlePlayerAttack = (tileId) => {
-    // resetting stuff first
-    setIsSelectingAttackingTarget(false);
-    setIsSelectingMovingLocation(false);
+  const handlePlayerAttack = (tileId: string) => {
     // calling the helper
     playerAttackWarriorAction(
       tileId,
@@ -118,12 +124,13 @@ export default function Battle() {
       setPlayersWarriors,
       setComputersWarriors
     );
-  };
-
-  const handlePlayerMoveWarrior = (tileId) => {
-    // resetting stuff first
+    // resetting stuff
     setIsSelectingAttackingTarget(false);
     setIsSelectingMovingLocation(false);
+    setIsSelectingSpellTargetForSpell(null);
+  };
+
+  const handlePlayerMoveWarrior = (tileId: string) => {
     // calling the helper that moves the warrior
     playerMoveWarriorAction(
       tileId,
@@ -133,11 +140,30 @@ export default function Battle() {
       setPlayersWarriors,
       setComputersWarriors
     );
+    // resetting stuff
+    setIsSelectingAttackingTarget(false);
+    setIsSelectingMovingLocation(false);
+    setIsSelectingSpellTargetForSpell(null);
+  };
+
+  const handlePlayerSpell = (spell: Spell, tileId: string) => {
+    // calling the helper
+    playerSpellWarriorAction(
+      battle,
+      spell,
+      tileId,
+      warriorWhoseTurnItIsToMove,
+      setBattle,
+      setPlayersWarriors,
+      setComputersWarriors
+    );
+    // resetting stuff
+    setIsSelectingAttackingTarget(false);
+    setIsSelectingMovingLocation(false);
+    setIsSelectingSpellTargetForSpell(null);
   };
 
   const handlePlayerWait = () => {
-    // resetting stuff first
-    setIsSelectingMovingLocation(false);
     // calling helper that performs the wait action
     playerWaitWarriorAction(
       warriorWhoseTurnItIsToMove,
@@ -146,6 +172,10 @@ export default function Battle() {
       setPlayersWarriors,
       setComputersWarriors
     );
+    // resetting stuff
+    setIsSelectingAttackingTarget(false);
+    setIsSelectingMovingLocation(false);
+    setIsSelectingSpellTargetForSpell(null);
   };
 
   // =============================================================================================
@@ -174,17 +204,27 @@ export default function Battle() {
         // handleSelectedWarriorChange={handleSelectedWarriorChange}
         handlePlayerAttack={handlePlayerAttack}
         handlePlayerMoveWarrior={handlePlayerMoveWarrior}
+        handlePlayerSpell={handlePlayerSpell}
         isSelectingAttackingTarget={isSelectingAttackingTarget}
         isSelectingMovingLocation={isSelectingMovingLocation}
+        isSelectingSpellTargetForSpell={isSelectingSpellTargetForSpell}
         warriorWhoseTurnItIsToMove={warriorWhoseTurnItIsToMove}
       />
-      <BattleActionBar activeWarrior={warriorWhoseTurnItIsToMove} />
+      <BattleActionBar
+        activeWarrior={warriorWhoseTurnItIsToMove}
+        displayWhat={battleActionBarDisplayWhat}
+        setIsSelectingAttackingTarget={setIsSelectingAttackingTarget}
+        setIsSelectingMovingLocation={setIsSelectingMovingLocation}
+        setIsSelectingSpellTargetForSpell={setIsSelectingSpellTargetForSpell}
+      />
       <BattleActionButtons
         handlePlayerWait={handlePlayerWait}
         isSelectingAttackingTarget={isSelectingAttackingTarget}
         isSelectingMovingLocation={isSelectingMovingLocation}
+        setBattleActionBarDisplayWhat={setBattleActionBarDisplayWhat}
         setIsSelectingAttackingTarget={setIsSelectingAttackingTarget}
         setIsSelectingMovingLocation={setIsSelectingMovingLocation}
+        setIsSelectingSpellTargetForSpell={setIsSelectingSpellTargetForSpell}
       />
     </div>
   );

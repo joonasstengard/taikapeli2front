@@ -1,17 +1,24 @@
 import type { SetStateAction, Dispatch } from "react";
 import type Warrior from "../../types/Warrior";
 import type Battle from "../../types/Battle";
+import type Spell from "../../types/Spell";
 
-export const playerAttackWarriorAction = (
+export const playerSpellWarriorAction = (
+  battle: Battle,
+  spell: Spell,
   tileId: string,
   warriorWhoseTurnItIsToMove: Warrior,
-  battle: Battle,
   setBattle: Dispatch<SetStateAction<Battle>>,
   setPlayersWarriors: Dispatch<SetStateAction<Warrior[]>>,
   setComputersWarriors: Dispatch<SetStateAction<Warrior[]>>
 ) => {
-  console.log("trying to attack with players warrior to this tile: " + tileId);
-  const url = `http://localhost:3001/game/battle/warriors/attackwithplayerswarriortotile/${warriorWhoseTurnItIsToMove.id}/${tileId}/${battle.playersArmyId}/${battle.computersArmyId}`;
+  console.log(
+    "trying to cast spell " +
+      spell.name +
+      "with players warrior to this tile: " +
+      tileId
+  );
+  const url = `http://localhost:3001/game/battle/warriors/castspellwithplayerswarriortotile/${warriorWhoseTurnItIsToMove.id}/${tileId}/${spell.id}/${battle.playersArmyId}/${battle.computersArmyId}`;
   fetch(url)
     .then((response) => response.json())
     .then((data) => {
@@ -21,7 +28,7 @@ export const playerAttackWarriorAction = (
     })
     .catch((error) =>
       console.error(
-        `Error attacking with players warrior ${warriorWhoseTurnItIsToMove.name}:`,
+        `Error casting spell with players warrior ${warriorWhoseTurnItIsToMove.name}:`,
         error
       )
     );

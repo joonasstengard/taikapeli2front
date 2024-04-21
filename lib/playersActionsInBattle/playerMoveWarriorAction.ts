@@ -3,7 +3,7 @@ import type Warrior from "../../types/Warrior";
 import type Battle from "../../types/Battle";
 
 export const playerMoveWarriorAction = (
-  tileId: number,
+  tileId: string,
   warriorWhoseTurnItIsToMove: Warrior,
   battle: Battle,
   setBattle: Dispatch<SetStateAction<Battle>>,
