@@ -56,7 +56,7 @@ export default function Battle() {
   const determineNextWarriorToMove = () => {
     const allWarriors = [...computersWarriors, ...playersWarriors];
     const warriorsYetToMove = allWarriors.filter(
-      (warrior) => warrior.hasMovedThisRound !== 1
+      (warrior) => warrior.hasMovedThisRound !== 1 && warrior.currentHealth > 0
     );
 
     if (warriorsYetToMove.length === 0) {
@@ -68,6 +68,7 @@ export default function Battle() {
       return fastest.speed > current.speed ? fastest : current;
     });
     console.log("this warrior moves next:" + nextWarrior.name);
+    console.log(nextWarrior);
     // computers warriors turn, WIP: players army id hardcoded as 1
     if (nextWarrior.armyId !== 1) {
       handleComputersTurn(battle.playersArmyId, battle.computersArmyId);
@@ -93,8 +94,6 @@ export default function Battle() {
       .then((response) => response.json())
       .then((data) => {
         // response contains separate lists for players and computers warriors and battleObject for battle
-        console.log("logging updatedWarriors from handleComputersTurn:");
-        console.log(data);
         setPlayersWarriors(data.playerArmyWarriors);
         setComputersWarriors(data.computerArmyWarriors);
         setBattle(data.battleObject);
@@ -154,6 +153,15 @@ export default function Battle() {
   /* const handleSelectedWarriorChange = (selectedWarrior: Warrior) => {
         setSelectedWarrior(selectedWarrior);
     } */
+
+  // wip: victory/defeat screen
+  if (battle?.winningArmyId) {
+    return (
+      <div>
+        <p>Army with the id of: {battle.winningArmyId} has won the battle!</p>
+      </div>
+    );
+  }
 
   return (
     <div>

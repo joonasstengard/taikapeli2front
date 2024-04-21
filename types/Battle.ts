@@ -5,6 +5,8 @@ export default interface Battle {
     userId: number;
     playersArmyId: number;
     computersArmyId: number;
+    // this is null until one army wins, then its that armys id
+    winningArmyId: number;
     
     // full rounds where every warrior has moved once
     round: number;

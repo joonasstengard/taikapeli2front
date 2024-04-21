@@ -145,9 +145,9 @@ export default function BattleMapTile({
     // texturePath = `/textures/greengrassstone${randomTileSubNumber}.webp`;
     texturePath = `/textures/greengrassstone${3}.webp`;
   } else {
-    const randomTileSubNumber = Math.floor(Math.random() * 5) + 1;
-    texturePath = `/textures/greengrass${randomTileSubNumber}.webp`;
-    // texturePath = `/textures/greengrass${3}.webp`;
+    // const randomTileSubNumber = Math.floor(Math.random() * 7) + 1;
+    // texturePath = `/textures/greengrass${randomTileSubNumber}.webp`;
+    texturePath = `/textures/greengrass${3}.webp`;
   }
 
   return (
@@ -173,7 +173,11 @@ export default function BattleMapTile({
           </div>
           <div className="warrior-image">
             <Image
-              src={`/WarriorPictures/PixelStyle/${warrior.class}${warrior.gender}${warrior.picture}.webp`}
+              src={
+                warrior.currentHealth > 0
+                  ? `/WarriorPictures/PixelStyle/${warrior.class}${warrior.gender}${warrior.picture}.webp`
+                  : `/objects/gravestone.webp`
+              }
               alt={"warrior"}
               width={70}
               height={70}
