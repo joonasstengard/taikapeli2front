@@ -85,6 +85,10 @@ export default function BattleActionBar({
                 {activeWarrior.spells[0] ? (
                   <ButtonishText
                     buttonText={activeWarrior.spells[0]?.name}
+                    disabled={
+                      activeWarrior.spells[0]?.manaCost >
+                      activeWarrior.currentMana
+                    }
                     id={0}
                     onClick={handleSpellSelect}
                   />
@@ -93,11 +97,19 @@ export default function BattleActionBar({
                 )}
                 <ButtonishText
                   buttonText={activeWarrior.spells[1]?.name}
+                  disabled={
+                    activeWarrior.spells[1]?.manaCost >
+                    activeWarrior.currentMana
+                  }
                   id={1}
                   onClick={handleSpellSelect}
                 />
                 <ButtonishText
                   buttonText={activeWarrior.spells[2]?.name}
+                  disabled={
+                    activeWarrior.spells[2]?.manaCost >
+                    activeWarrior.currentMana
+                  }
                   id={2}
                   onClick={handleSpellSelect}
                 />
@@ -106,16 +118,28 @@ export default function BattleActionBar({
               <div className="center-grid">
                 <ButtonishText
                   buttonText={activeWarrior.spells[3]?.name}
+                  disabled={
+                    activeWarrior.spells[3]?.manaCost >
+                    activeWarrior.currentMana
+                  }
                   id={3}
                   onClick={handleSpellSelect}
                 />
                 <ButtonishText
                   buttonText={activeWarrior.spells[4]?.name}
+                  disabled={
+                    activeWarrior.spells[4]?.manaCost >
+                    activeWarrior.currentMana
+                  }
                   id={4}
                   onClick={handleSpellSelect}
                 />
                 <ButtonishText
                   buttonText={activeWarrior.spells[5]?.name}
+                  disabled={
+                    activeWarrior.spells[5]?.manaCost >
+                    activeWarrior.currentMana
+                  }
                   id={5}
                   onClick={handleSpellSelect}
                 />
@@ -124,16 +148,28 @@ export default function BattleActionBar({
               <div className="right-grid">
                 <ButtonishText
                   buttonText={activeWarrior.spells[6]?.name}
+                  disabled={
+                    activeWarrior.spells[6]?.manaCost >
+                    activeWarrior.currentMana
+                  }
                   id={6}
                   onClick={handleSpellSelect}
                 />
                 <ButtonishText
                   buttonText={activeWarrior.spells[7]?.name}
+                  disabled={
+                    activeWarrior.spells[7]?.manaCost >
+                    activeWarrior.currentMana
+                  }
                   id={7}
                   onClick={handleSpellSelect}
                 />
                 <ButtonishText
                   buttonText={activeWarrior.spells[8]?.name}
+                  disabled={
+                    activeWarrior.spells[8]?.manaCost >
+                    activeWarrior.currentMana
+                  }
                   id={8}
                   onClick={handleSpellSelect}
                 />

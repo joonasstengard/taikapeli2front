@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import BattleActionBar from "./BattleActionBar";
 import BattleActionButtons from "./BattleActionButtons";
+import BattleCommentary from "./BattleCommentary";
 import BattleMap from "./BattleMap";
 
 import { playerAttackWarriorAction } from "../../lib/playersActionsInBattle/playerAttackWarriorAction";
@@ -198,6 +199,7 @@ export default function Battle() {
       <p>round: {battle?.round}</p>
       <p>battle turn counter: {battle?.turnsTaken}</p>
       <h2>{warriorWhoseTurnItIsToMove?.name}'s turn</h2>
+      <BattleCommentary commentaryLastLine={battle?.commentaryLastLine} />
       <BattleMap
         computersWarriors={computersWarriors}
         playersWarriors={playersWarriors}

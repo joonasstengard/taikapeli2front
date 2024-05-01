@@ -1,4 +1,6 @@
+import React, { useState } from "react";
 import Image from "next/image";
+import { getSpellGifPath } from "../../lib/battleCommon/getSpellGifPath";
 
 import type Spell from "../../types/Spell";
 import type Warrior from "../../types/Warrior";
@@ -32,6 +34,12 @@ export default function BattleMapTile({
   warrior,
   warriorWhoseTurnItIsToMove,
 }: Props) {
+  //animations, these are enabled briefly and then disabled to end the animation
+  const [showAttackAnimation, setShowAttackAnimation] = useState(false);
+  const [showSpellAnimation, setShowSpellAnimation] = useState(false);
+
+  const [spellGifPath, setSpellGifPath] = useState<string>();
+
   // if battleMapWidth = 6, columns is = ["A", "B", "C", "D", "E", "F"] etc...
   const columns = Array.from({ length: battleMapWidth }, (_, i) =>
     String.fromCharCode(65 + i)
@@ -71,6 +79,8 @@ export default function BattleMapTile({
       distance <= maxDistanceForAttacking
     ) {
       handlePlayerAttack(tileId);
+      setShowAttackAnimation(true);
+      setTimeout(() => setShowAttackAnimation(false), 700); // animation duration
     } else if (distance > maxDistanceForAttacking) {
       // alert the user here that they are trying to attack past the max range?
     }
@@ -91,6 +101,9 @@ export default function BattleMapTile({
       distance <= maxDistanceForSpellTarget
     ) {
       handlePlayerSpell(isSelectingSpellTargetForSpell, tileId);
+      setSpellGifPath(getSpellGifPath(isSelectingSpellTargetForSpell));
+      setShowSpellAnimation(true);
+      setTimeout(() => setShowSpellAnimation(false), 620); // animation duration
     } else if (distance > maxDistanceForSpellTarget) {
       // alert the user here that they are trying to target spell past the max range?
     }
@@ -193,6 +206,30 @@ export default function BattleMapTile({
 
   return (
     <div className={tileClass} onClick={handleClick}>
+      {showAttackAnimation && (
+        <div className="fx-animation">
+          <Image
+            src={`/effects/attack/AttackSlashFx1.gif`}
+            alt="attack fx"
+            height={70}
+            // animations can't be optimized with <Image>
+            unoptimized={true}
+            width={70}
+          />
+        </div>
+      )}
+      {showSpellAnimation && (
+        <div className="fx-animation">
+          <Image
+            src={spellGifPath}
+            alt="spell fx"
+            height={70}
+            // animations can't be optimized with <Image>
+            unoptimized={true}
+            width={70}
+          />
+        </div>
+      )}
       <Image src={texturePath} alt={"tile"} width={70} height={70} />
       {warrior && (
         <div>
@@ -244,10 +281,15 @@ export default function BattleMapTile({
           height: 5px;
           background-color: #991717;
         }
+        .fx-animation {
+          position: absolute;
+          z-index: 2;
+        }
         .tile {
           position: relative;
           width: 70px;
           height: 70px;
+          z-index: 1; // lower z index than animations
         }
         .tile.attacking-empty-tile:hover {
           border: 2px solid black;
